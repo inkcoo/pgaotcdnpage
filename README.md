@@ -28,8 +28,8 @@ git push -u origin main
 
 ## 说明
 - `_worker.js` 会：
-  - 通过 Service Binding 直接调用上游 Worker：`env.pgaotcdn.fetch(...)`。
-  - 如需处理上游重定向，可在 `modifyResponse` 中按需改写 `Location` 头为当前域名。
+  - 将请求的主机名改写到 `pgaotcdn.ixiaocang.workers.dev` 并通过 `env.PGAOTCDN.fetch(...)` 直连上游 Worker。
+  - 将上游返回的 `Location` 中的 `workers.dev` 主机改写回当前域，避免跳转不可达。
 - 如需开启缓存（仅 GET），可在 `_worker.js` 中对 `fetch` 添加 `cf.cacheEverything` 与 `cacheTtl` 参数。
 - 请仅反代你拥有/控制的站点，遵守 Cloudflare 服务条款与当地法律法规。
 
