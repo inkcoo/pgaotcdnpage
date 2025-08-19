@@ -1,0 +1,15 @@
+# Node/Tools
+node_modules/
+.wrangler/
+
+# Builds
+.dist/
+dist/
+build/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Env
+.env*
