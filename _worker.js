@@ -16,8 +16,17 @@ export default {
         // 构造上游请求，尽量保持与原始请求一致
         const upstreamRequest = new Request(upstreamUrl.toString(), incomingRequest);
 
-        // 通过 Service Binding 直连调用（需在 Pages 项目设置中绑定 name=PGAOTCDN → 选择你的 Worker 服务）
-        const upstreamResponse = await env.PGAOTCDN.fetch(upstreamRequest);
+        // 先尝试通过 Service Binding 直连调用；若未绑定则安全回退到直接 HTTP fetch
+        let upstreamResponse;
+        try {
+            if (env && env.PGAOTCDN && typeof env.PGAOTCDN.fetch === 'function') {
+                upstreamResponse = await env.PGAOTCDN.fetch(upstreamRequest);
+            } else {
+                upstreamResponse = await fetch(upstreamRequest);
+            }
+        } catch (error) {
+            return new Response('Bad Gateway', { status: 502 });
+        }
 
         // 处理上游返回头：
         // - 将任何指向 workers.dev 的跳转改写回当前域，避免浏览器跳出到不可达域
