@@ -20,7 +20,7 @@ git push -u origin main
    - 自动识别 `_worker.js` 为 Functions-only 项目
 4. 部署完成后，进入 Pages 项目 → Settings → Functions → Service bindings：
    - Add binding：
-     - Binding name：`PGAOTCDN`
+     - Binding name：`pgaotcdn`
      - Service：选择你的 Worker（`pgaotcdn`）
      - Environment：production
    - 保存后如未自动重建，点击“Retry deployment”。
@@ -28,8 +28,8 @@ git push -u origin main
 
 ## 说明
 - `_worker.js` 会：
-  - 将请求的主机名改写到 `pgaotcdn.ixiaocang.workers.dev` 并通过 `env.PGAOTCDN.fetch(...)` 直连上游 Worker。
-  - 将上游返回的 `Location` 中的 `workers.dev` 主机改写回当前域，避免跳转不可达。
+  - 通过 Service Binding 直接调用上游 Worker：`env.pgaotcdn.fetch(...)`。
+  - 如需处理上游重定向，可在 `modifyResponse` 中按需改写 `Location` 头为当前域名。
 - 如需开启缓存（仅 GET），可在 `_worker.js` 中对 `fetch` 添加 `cf.cacheEverything` 与 `cacheTtl` 参数。
 - 请仅反代你拥有/控制的站点，遵守 Cloudflare 服务条款与当地法律法规。
 

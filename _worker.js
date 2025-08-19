@@ -25,7 +25,11 @@ export default {
     
     try {
       // 通过服务绑定调用Worker
-      const response = await env.ORIGIN_WORKER.fetch(modifiedReq);
+      const origin = env.pgaotcdn;
+      if (!origin || typeof origin.fetch !== 'function') {
+        return new Response('服务绑定未配置：请在 Pages → Settings → Functions → Service bindings 中添加绑定名 pgaotcdn 指向 Worker pgaotcdn', {status: 500});
+      }
+      const response = await origin.fetch(modifiedReq);
       return modifyResponse(response);
     } catch (error) {
       return new Response('服务连接异常', {status: 502});
