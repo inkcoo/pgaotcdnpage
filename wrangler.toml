@@ -1,9 +1,0 @@
-name = "pgotcdn-proxy"
-compatibility_date = "2024-06-01"
-
-[vars]
-UPSTREAM_URL = "pgaotcdn.ixiaocang.workers.dev"
-
-[[services]]
-binding = "pgaotcdn"
-service = "pgaotcdn"  # 替换为您的Worker名称
